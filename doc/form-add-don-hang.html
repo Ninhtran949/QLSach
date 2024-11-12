@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Danh sách đơn hàng | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- or -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <!-- Font-icon css-->
+  <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- FullCalendar CSS -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css" rel="stylesheet">
+
+  <!-- FullCalendar JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header" style="background-color: #ebf5fb">
+  <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                  aria-label="Hide Sidebar"></a>
+  <!-- Navbar Right Menu-->
+  <ul class="app-nav">
+
+
+    <!-- User Menu-->
+    <li><a class="app-nav__item" href="login.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+    </li>
+  </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px"
+                                      alt="User Image">
+    <div>
+      <p class="app-sidebar__user-name" style="color: #001C40;"><b>Bookify</b></p>
+      <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <!-- <li><a class="app-menu__item haha" href="phan-mem-ban-hang.html"><i class='app-menu__icon bx bx-cart-alt' style="color: #001C40;"></i>
+      <span class="app-menu__label" style="color: #001C40;">POS Bán Hàng</span></a></li> -->
+    <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+    <li><a class="app-menu__item " href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span
+            class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-san-pham.html"><i
+            class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a>
+    </li>
+    <li><a class="app-menu__item active" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+    <!-- <li><a class="app-menu__item" href="table-data-banned.html"><i class='app-menu__icon bx bx-run' style="color: #001C40;"></i><span
+          class="app-menu__label" style="color: #001C40;">Quản lý nội bộ
+        </span></a></li> -->
+    <!-- <li><a class="app-menu__item" href="table-data-money.html"><i class='app-menu__icon bx bx-dollar' style="color: #001C40;"></i><span
+          class="app-menu__label" style="color: #001C40;">Bảng kê lương</span></a></li> -->
+    <li><a class="app-menu__item" href="bao-cao-doanh-thu.html"><i
+            class='app-menu__icon bx bx-pie-chart-alt-2' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a>
+    </li>
+    <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Lịch công tác </span></a></li>
+    <!-- <li><a class="app-menu__item" href="#"><i class='app-menu__icon bx bx-cog' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Cài
+          đặt hệ thống</span></a></li> -->
+  </ul>
+</aside>
+<main class="app-content">
+  <div class="app-title">
+    <ul class="app-breadcrumb breadcrumb">
+      <li class="breadcrumb-item">Danh sách đơn hàng</li>
+      <li class="breadcrumb-item"><a href="#">Thêm đơn hàng</a></li>
+    </ul>
+    <div id="clock"></div>
+  </div>
+  <div class="container">
+    <form id="addBillForm">
+      <label for="idBill">Bill ID:</label><br>
+      <input type="text" id="idBill" placeholder="Bill ID" required><br><br>
+      <label for="idClient">Client ID:</label><br>
+      <input type="text" id="idClient" placeholder="Client ID" required><br><br>
+      <label for="idPartner">Partner ID:</label><br>
+      <input type="text" id="idPartner" placeholder="Partner ID" required><br><br>
+      <label for="status">Status:</label><br>
+      <select id="status" required>
+        <option value="Pending">Pending</option>
+        <option value="Yes">Yes</option>
+        <option value="No">No</option>
+      </select><br><br>
+      <label for="dayOut">Day Out:</label><br>
+      <input type="date" id="dayOut" required><br><br>
+      <h3>Cart Details:</h3>
+      <div id="cartItems">
+        <div class="cart-item">
+          <label for="nameProduct">Product:</label>
+          <input type="text" id="nameProduct" placeholder="Product name" required> <br>
+          <label for="numberProduct">Quantity:</label>
+          <input type="number" id="numberProduct" placeholder="Product" required> <br>
+          <label for="priceProduct">Price:</label>
+          <input type="number" id="priceProduct" placeholder="Price" required>
+          <button type="button" id="addCartItem">Add to Cart</button> <br>
+        </div>
+      </div>
+      <ul id="cartDetailsList"></ul>
+      <label for="total">Total:</label><br>
+      <input type="text" id="total" placeholder="Total" readonly><br><br>
+      <button type="submit">Tạo mới đơn hàng</button>
+    </form>
+  </div>
+
+  <script>
+    let cartDetails = [];
+
+    // Hàm tính tổng giá trị giỏ hàng
+    function calculateTotal() {
+      let total = 0;
+      cartDetails.forEach(item => {
+        total += item.numberProduct * item.priceProduct;
+      });
+      document.getElementById('total').value = total;  // Cập nhật giá trị Total
+    }
+
+    document.getElementById('addCartItem').addEventListener('click', function () {
+      const nameProduct = document.getElementById('nameProduct').value;
+      const numberProduct = parseInt(document.getElementById('numberProduct').value);  // Chuyển đổi sang số nguyên
+      const priceProduct = parseFloat(document.getElementById('priceProduct').value);  // Chuyển đổi sang số thực
+
+      if (nameProduct && numberProduct && priceProduct) {
+        const cartItem = {
+          nameProduct: nameProduct,
+          numberProduct: numberProduct,
+          priceProduct: priceProduct
+        };
+
+        cartDetails.push(cartItem);
+
+        // Hiển thị danh sách chi tiết giỏ hàng
+        const cartDetailsList = document.getElementById('cartDetailsList');
+        const listItem = document.createElement('li');
+        listItem.textContent = `nameProduct: ${nameProduct}, numberProduct: ${numberProduct}, priceProduct: ${priceProduct}`;
+        cartDetailsList.appendChild(listItem);
+
+        // Reset các trường input
+        //document.getElementById('nameProduct').value = '';
+        //document.getElementById('numberProduct').value = '';
+        //document.getElementById('priceProduct').value = '';
+
+        // Cập nhật tổng giá trị giỏ hàng
+        calculateTotal();
+      } else {
+        alert('Vui lòng điền đầy đủ thông tin sản phẩm.');
+      }
+    });
+
+    document.getElementById('addBillForm').addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      const newBill = {
+        idBill: document.getElementById('idBill').value,
+        idClient: document.getElementById('idClient').value,
+        idPartner: document.getElementById('idPartner').value,
+        total: document.getElementById('total').value,  // Giá trị tổng sẽ tự động được tính
+        status: document.getElementById('status').value,
+        Cart: cartDetails,  // Gán các chi tiết giỏ hàng đã nhập
+        dayOut: document.getElementById('dayOut').value,
+        timeOut: new Date().toISOString()  // Thời gian tạo hóa đơn (tự động thêm)
+      };
+
+      fetch('http://localhost:8080/bills/addBill', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newBill)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.text();  // Lấy phản hồi dưới dạng text
+        })
+        .then(data => {
+          alert('Bill added successfully');
+            console.log(data);
+            window.location.href = 'quan-ly-don-hang.html';  // Điều hướng lại trang quản lý đơn hàng
+          })
+        .catch(error => console.error('Error adding bill:', error));
+    });
+  </script>
+  <script type="text/javascript">
+    $(document).ready(function() {
+
+      $('#external-events .fc-event').each(function() {
+
+        // store data so the calendar knows to render an event upon drop
+        $(this).data('event', {
+          title: $.trim($(this).text()), // use the element's text as the event title
+          stick: true // maintain when user navigates (see docs on the renderEvent method)
+        });
+
+        // make the event draggable using jQuery UI
+        $(this).draggable({
+          zIndex: 999,
+          revert: true,      // will cause the event to go back to its
+          revertDuration: 0  //  original position after the drag
+        });
+
+      });
+
+      $('#calendar').fullCalendar({
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,agendaWeek,agendaDay'
+        },
+        editable: true,
+        droppable: true, // this allows things to be dropped onto the calendar
+        drop: function() {
+          // is the "remove after drop" checkbox checked?
+          if ($('#drop-remove').is(':checked')) {
+            // if so, remove the element from the "Draggable Events" list
+            $(this).remove();
+          }
+        }
+      });
+
+
+    });
+  </script>
+  <script type="text/javascript">
+    //Thời Gian
+    function time() {
+      var today = new Date();
+      var weekday = new Array(7);
+      weekday[0] = "Chủ Nhật";
+      weekday[1] = "Thứ Hai";
+      weekday[2] = "Thứ Ba";
+      weekday[3] = "Thứ Tư";
+      weekday[4] = "Thứ Năm";
+      weekday[5] = "Thứ Sáu";
+      weekday[6] = "Thứ Bảy";
+      var day = weekday[today.getDay()];
+      var dd = today.getDate();
+      var mm = today.getMonth() + 1;
+      var yyyy = today.getFullYear();
+      var h = today.getHours();
+      var m = today.getMinutes();
+      var s = today.getSeconds();
+      m = checkTime(m);
+      s = checkTime(s);
+      nowTime = h + " giờ " + m + " phút " + s + " giây";
+      if (dd < 10) {
+        dd = '0' + dd
+      }
+      if (mm < 10) {
+        mm = '0' + mm
+      }
+      today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+      tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+              '</span>';
+      document.getElementById("clock").innerHTML = tmp;
+      clocktime = setTimeout("time()", "1000", "Javascript");
+
+      function checkTime(i) {
+        if (i < 10) {
+          i = "0" + i;
+        }
+        return i;
+      }
+    }
+  </script>
+</main>
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #001C40;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      margin-bottom: 15px;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #ebf5fb;
+      color: #001C40;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #ebf5fb;
+    }
+</style>
+
+<!-- Essential javascripts for application to work-->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="js/plugins/pace.min.js"></script>
+</body>
+</html>

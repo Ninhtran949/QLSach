@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Danh sách sản phẩm | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Main CSS-->
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <!-- or -->
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+    <!-- Font-icon css-->
+    <link rel="stylesheet" type="text/css"
+          href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl">
+<!-- Navbar-->
+<header class="app-header" style="background-color: #ebf5fb">
+    <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                    aria-label="Hide Sidebar"></a>
+    <!-- Navbar Right Menu-->
+    <ul class="app-nav">
+
+        <!-- User Menu-->
+        <li><a class="app-nav__item" style="background-color: #aed6f1 " href="login.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+
+        </li>
+    </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb">
+    <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px"
+                                        alt="User Image">
+        <div>
+            <p class="app-sidebar__user-name"><b style="color: #001C40;">Bookify</b></p>
+            <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+        </div>
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span
+                class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+       <!-- <li><a class="app-menu__item" href="chat-ai.html"><i class='app-menu__icon bx bx-chat' style="color: #001C40;"></i><span
+                class="app-menu__label" style="color: #001C40;">Chăm sóc khách hàng</span></a></li> -->
+        <li><a class="app-menu__item" href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span
+                class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+        <li><a class="app-menu__item active" href="quan-ly-san-pham.html"><i
+                class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a>
+        </li>
+        <li><a class="app-menu__item" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span
+                class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item" href="bao-cao-doanh-thu.html"><i class='app-menu__icon bx bx-bar-chart-alt-2' style="color: #001C40;"></i><span
+                class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a></li>
+        <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span
+                class="app-menu__label" style="color: #001C40;">Lịch công tác </span></a></li>
+        <li><a class="app-menu__item" href="quan-ly-chi-nhanh.html"><i class='app-menu__icon bx bx-store' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý Chi Nhánh</span></a></li>
+    </ul>
+</aside>
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb side">
+            <li class="breadcrumb-item active"><a href="#"><b>Danh sách sản phẩm</b></a></li>
+        </ul>
+        <div id="clock"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="tile">
+                <div class="tile-body">
+                    <div class="row element-button">
+                        <div class="col-sm-2">
+                            <a class="btn btn-add btn-sm" href="form-add-san-pham.html" title="Thêm"><i class="fas fa-plus"></i>
+                                Tạo mới sản phẩm</a>
+                        </div>
+                    </div>
+                    <table class="table table-hover table-bordered" id="sampleTable">
+                        <thead>
+                        <tr>
+                            <th width="20">ID</th>
+                            <th width="60">Ảnh sách</th>
+                            <th>Tên sách</th>
+                            <th width="160">Tác Giả</th>
+                            <th width="120">Thể Loại</th>
+                            <th width="90">Giá tiền</th>
+                            <th width="60">Chức năng</th>
+                        </tr>
+                        </thead>
+                        <tbody id="productTable">
+                        <!-- Dữ liệu sp sẽ được thêm vào đây -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ---------Modal----------- -->
+    <div id="editFormContainer" style="display: none;">
+        <h3>Chỉnh sửa sản phẩm</h3>
+        <form id="editForm">
+            <input type="hidden" id="editProductId">
+            <div>
+                <label for="editProductName">Tên sách:</label>
+                <input type="text" id="editProductName" required>
+            </div>
+            <div>
+                <label for="editProductAuthor">Tác giả:</label>
+                <input type="text" id="editProductAuthor" required>
+            </div>
+            <div>
+                <label for="editProductCategory">Thể loại:</label>
+                <input type="text" id="editProductCategory" required>
+            </div>
+            <div>
+                <label for="editProductPrice">Giá tiền:</label>
+                <input type="text" id="editProductPrice" required>
+            </div>
+            <button type="button" onclick="updateProduct()">Cập nhật</button>
+            <button type="button" onclick="cancelEdit()">Hủy</button>
+        </form>
+    </div>
+
+</main>
+
+<!-- Essential javascripts for application to work-->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script src="src/jquery.table2excel.js"></script>
+<script src="js/main.js"></script>
+<!-- The javascript plugin to display page loading on top-->
+<script src="js/plugins/pace.min.js"></script>
+<!-- Page specific javascripts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- Data table plugin-->
+<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">
+    $('#sampleTable').DataTable();
+    //Thời Gian
+    function time() {
+        var today = new Date();
+        var weekday = new Array(7);
+        weekday[0] = "Chủ Nhật";
+        weekday[1] = "Thứ Hai";
+        weekday[2] = "Thứ Ba";
+        weekday[3] = "Thứ Tư";
+        weekday[4] = "Thứ Năm";
+        weekday[5] = "Thứ Sáu";
+        weekday[6] = "Thứ Bảy";
+        var day = weekday[today.getDay()];
+        var dd = today.getDate();
+        var mm = today.getMonth() + 1;
+        var yyyy = today.getFullYear();
+        var h = today.getHours();
+        var m = today.getMinutes();
+        var s = today.getSeconds();
+        m = checkTime(m);
+        s = checkTime(s);
+        nowTime = h + " giờ " + m + " phút " + s + " giây";
+        if (dd < 10) {
+            dd = '0' + dd
+        }
+        if (mm < 10) {
+            mm = '0' + mm
+        }
+        today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+        tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+            '</span>';
+        document.getElementById("clock").innerHTML = tmp;
+        clocktime = setTimeout("time()", "1000", "Javascript");
+
+        function checkTime(i) {
+            if (i < 10) {
+                i = "0" + i;
+            }
+            return i;
+        }
+    }
+    async function fetchProducts() {
+        try {
+            const response = await fetch('http://localhost:8080/products');
+            const products = await response.json();
+
+            const productTable = document.getElementById('productTable');
+            productTable.innerHTML = ''; // Xóa nội dung cũ
+
+            products.forEach(products => {
+                let author;
+                switch (products.codeProduct) {
+                    case '1':
+                        author = 'Victory Hugo';
+                        break;
+                    case '2':
+                        author = 'Chelovek v futlyare';
+                        break;
+                    case '3':
+                        author = 'Thạch Lam';
+                        break;
+                    case '4':
+                        author = 'Jean Jacques Rousseau';
+                        break;
+                    case '5':
+                        author = 'Dale Carnegie';
+                        break;
+                    case '6':
+                        author = 'Robyn Conley Downs';
+                        break;
+                    case '7':
+                        author = 'TS. Đặng Thị Việt Đức';
+                        break;
+                    case '8':
+                        author = 'ThomasL.Friedman';
+                        break;
+                    case '9':
+                        author = 'Paul Krugman & Robin Wells';
+                        break;
+                    case '10':
+                        author = 'Viktor E.Frankl';
+                        break;
+                    case '11':
+                        author = 'Stephen J. Dubner';
+                        break;
+                    case '12':
+                        author = 'Stanton E.Samenow';
+                        break;
+                    case '13':
+                        author = 'Morgan Housel';
+                        break;
+                    case '14':
+                        author = 'Peter Swanson';
+                        break;
+                    case '15':
+                        author = 'Saint-Exupéry';
+                        break;
+                    case '16':
+                        author = 'Vũ Trọng Phụng';
+                        break;
+                    case '17':
+                        author = 'Trang Xtd';
+                        break;
+                    case '18':
+                        author = 'Nguyễn Duy Cần';
+                        break;
+                    case '19':
+                        author = 'Nguyễn Thụy Phương';
+                        break;
+                    case '20':
+                        author = 'Robert Kiyosaki';
+                        break;
+                    case '21':
+                        author = 'John C. Maxwell';
+                        break;
+                    case '22':
+                        author = 'Nguyễn Hiến Lê';
+                        break;
+                    case '23':
+                        author = 'Edmondo De Amicis';
+                        break;
+                    case '24':
+                        author = 'Nguyễn Duy Cần';
+                        break;
+                    case '25':
+                        author = 'Tô Hoài';
+                        break;
+                    case '26':
+                        author = 'Nguyễn Nhật Ánh';
+                        break;
+                    case '27':
+                        author = 'Nguyễn Nhật Ánh';
+                        break;
+                    case '28':
+                        author = 'Hans Christian Andersen';
+                        break;
+                    case '29':
+                        author = 'Tổng hợp nhiều tác giả';
+                        break;
+                    case '30':
+                        author = 'Tổng hợp nhiều tác giả';
+                        break;
+                    case '31':
+                        author = 'Nguyễn Nhật Ánh';
+                        break;
+                    case '32':
+                        author = 'Nguyễn Ngọc Thuần';
+                        break;
+                    case '33':
+                        author = 'Nguyên Hồng';
+                        break;
+                    case '34':
+                        author = 'Tô Hoài';
+                        break;
+                    case '35':
+                        author = 'Trần Văn Giàu';
+                        break;
+                    case '36':
+                        author = 'Nam Cao';
+                        break;
+                    case '37':
+                        author = 'Nguyễn Ngọc Ký';
+                        break;
+                    case '38':
+                        author = 'Nguyễn Văn Trỗi';
+                        break;
+                    case '39':
+                        author = 'Nguyễn Ngọc Ký';
+                        break;
+                    case '40':
+                        author = 'Hữu Thọ';
+                        break;
+                    case '41':
+                        author = 'Hữu Thọ';
+                        break;
+                    case '42':
+                        author = 'Raymond Murphy';
+                        break;
+                    case '43':
+                        author = 'Ruth Gairns & Stuart Redman';
+                        break;
+                    case '44':
+                        author = 'Đại học Cambridge';
+                        break;
+                    case '45':
+                        author = 'Gabriel Wyner';
+                        break;
+                    case '46':
+                        author = 'William Strunk Jr. & E.B. White';
+                        break;
+                    case '47':
+                        author = 'Mary W. Cornog';
+                        break;
+                    case '48':
+                        author = 'Collins Dictionaries';
+                        break;
+                    case '49':
+                        author = 'The Korean Institute';
+                        break;
+                    case '50':
+                        author = 'Paul Nation';
+                        break;
+                    case '51':
+                        author = 'Susana Wald';
+                        break;
+
+                    default:
+                        author = 'Tác giả không xác định';
+                }
+
+                let category;
+                switch (products.codeCategory) {
+                    case '1':
+                        category = 'Văn học';
+                        break;
+                    case '2':
+                        category = 'Kinh tế';
+                        break;
+                    case '3':
+                        category = 'Tâm lý';
+                        break;
+                    case '4':
+                        category = 'Giáo dục';
+                        break;
+                    case '5':
+                        category = 'Thiếu nhi';
+                        break;
+                    case '6':
+                        category = 'Hồi ký';
+                        break;
+                    case '7':
+                        category = 'Giáo khoa';
+                        break;
+                    case '8':
+                        category = 'Ngoại ngữ';
+                        break;
+                }
+                let image;
+                switch (products.codeProduct) {
+                    case '1':
+                        image = '<img src="img-sanpham/Nhung-nguoi-khon-kho.jpg" alt="Nhung-nguoi-khon-kho" width="50">';
+                        break;
+                    case '2':
+                        image = '<img src="img-sanpham/Nguoi-trong-bao.jpg" alt="Nguoi-trong-bao" width="50">';
+                        break;
+                    case '3':
+                        image = '<img src="img-sanpham/Hai-dua-tre.jpg" alt="Hai-dua-tre" width="50">';
+                        break;
+                    case '4':
+                        image = '<img src="img-sanpham/Emile-hay-la-ve-giao-duc.jpg" alt="Emile-hay-la-ve-giao-duc" width="50">';
+                        break;
+                    case '5':
+                        image = '<img src="img-sanpham/Dac-nhan-tam.jpg" alt="Dac-nhan-tam" width="50">';
+                        break;
+                    case '6':
+                        image = '<img src="img-sanpham/Tam-ly-hoc-hanh-vi.jpg" alt="Tam-ly-hoc-hanh-vi" width="50">';
+                        break;
+                    case '7':
+                        image = '<img src="img-sanpham/kinh-te-so.jpg" alt="kinh-te-so" width="50">';
+                        break;
+                    case '8':
+                        image = '<img src="img-sanpham/The-gioi-phang.jpg" alt="The-gioi-phang" width="50">';
+                        break;
+                    case '9':
+                        image = '<img src="img-sanpham/Kinh-te-hoc.jpg" alt="Kinh-te-hoc" width="50">';
+                        break;
+                    case '10':
+                        image = '<img src="img-sanpham/Di-tim-le-song.jpg" alt="Di-tim-le-song" width="50">';
+                        break;
+                    case '11':
+                        image = '<img src="img-sanpham/Khi-nao-cuop-nha-bang.jpg" alt="Khi-nao-cuop-nha-bang" width="50">';
+                        break;
+                    case '12':
+                        image = '<img src="img-sanpham/Tam-ly-hoc-toi-pham.jpg" alt="Tam-ly-hoc-toi-pham" width="50">';
+                        break;
+                    case '13':
+                        image = '<img src="img-sanpham/Tam-ly-hoc-ve-tien.jpg" alt="Tam-ly-hoc-ve-tien" width="50">';
+                        break;
+                    case '14':
+                        image = '<img src="img-sanpham/8-vu-an-hoan-hao.jpg" alt="8-vu-an-hoan-hao" width="50">';
+                        break;
+                    case '15':
+                        image = '<img src="img-sanpham/Hoang-tu-be.jpg" alt="Hoang-tu-be" width="50">';
+                        break;
+                    case '16':
+                        image = '<img src="img-sanpham/So-do.jpg" alt="So-do" width="50">';
+                        break;
+                    case '17':
+                        image = '<img src="img-sanpham/Tuoi-20-toi-da-song-nhu-mot-bong-hoa-dai.jpg" alt="Tuoi-20-toi-da-song-nhu-mot-bong-hoa-dai" width="50">';
+                        break;
+                    case '18':
+                        image = '<img src="img-sanpham/Toi-tu-hoc.png" alt="Toi-tu-hoc" width="50">';
+                        break;
+                    case '19':
+                        image = '<img src="img-sanpham/Giao-duc-VN-duoi-thoi-thuoc-dia.png" alt="Giao-duc-VN-duoi-thoi-thuoc-dia" width="50">';
+                        break;
+                    case '20':
+                        image = '<img src="img-sanpham/Day-con-lam-giau.png" alt="Day-con-lam-giau" width="50">';
+                        break;
+                    case '21':
+                        image = '<img src="img-sanpham/Hoc-tu-that-bai.png" alt="Hoc-tu-that-bai" width="50">';
+                        break;
+                    case '22':
+                        image = '<img src="img-sanpham/Ben-le-con-chu.png" alt="Ben-le-con-chu" width="50">';
+                        break;
+                    case '23':
+                        image = '<img src="img-sanpham/Nhung-tam-long-cao-ca.png" alt="Nhung-tam-long-cao-ca" width="50">';
+                        break;
+                    case '24':
+                        image = '<img src="img-sanpham/Giao-duc-nhan-ban.png" alt="Giao-duc-nhan-ban" width="50">';
+                        break;
+                    case '25':
+                        image = '<img src="img-sanpham/De-me-phieu-luu-ky.png" alt="De-me-phieu-luu-ky" width="50">';
+                        break;
+                    case '26':
+                        image = '<img src="img-sanpham/Kinh-van-hoa.png" alt="Kinh-van-hoa" width="50">';
+                        break;
+                    case '27':
+                        image = '<img src="img-sanpham/Cho-toi-xin-1-ve-di-tuoi-tho.png" alt="Cho-toi-xin-1-ve-di-tuoi-tho" width="50">';
+                        break;
+                    case '28':
+                        image = '<img src="img-sanpham/Co-be-ban-diem.png" alt="Co-be-ban-diem" width="50">';
+                        break;
+                    case '29':
+                        image = '<img src="img-sanpham/Truyen-co-tich-VN.png" alt="Truyen-co-tich-VN" width="50">';
+                        break;
+                    case '30':
+                        image = '<img src="img-sanpham/Nghin-le-mot-dem.png" alt="Nghin-le-mot-dem" width="50">';
+                        break;
+                    case '31':
+                        image = '<img src="img-sanpham/Song-nhu-nhung-doa-hoa.png" alt="Song-nhu-nhung-doa-hoa" width="50">';
+                        break;
+                    case '32':
+                        image = '<img src="img-sanpham/Vua-nham-mat-vua-mo-cua-so.png" alt="Vua-nham-mat-vua-mo-cua-so" width="50">';
+                        break;
+                    case '33':
+                        image = '<img src="img-sanpham/Nhung-ngay-tho-au.png" alt="Nhung-ngay-tho-au" width="50">';
+                        break;
+                    case '34':
+                        image = '<img src="img-sanpham/Cat-bui-chan-ai.png" alt="Cat-bui-chan-ai." width="50">';
+                        break;
+                    case '35':
+                        image = '<img src="img-sanpham/Hoi-ky-1940-1945.png" alt="Hoi-ky-1940-1945" width="50">';
+                        break;
+                    case '36':
+                        image = '<img src="img-sanpham/Doi-mat.png" alt="Doi-mat" width="50">';
+                        break;
+                    case '37':
+                        image = '<img src="img-sanpham/Toi-di-hoc.png" alt="Toi-di-hoc" width="50">';
+                        break;
+                    case '38':
+                        image = '<img src="img-sanpham/Thep-da-toi-the-day.png" alt="Thep-da-toi-the-day" width="50">';
+                        break;
+                    case '39':
+                        image = '<img src="img-sanpham/Toi-hoc-dai-hoc.png" alt="Toi-hoc-dai-hoc" width="50">';
+                        break;
+                    case '40':
+                        image = '<img src="img-sanpham/Mot-doi-lam-bao.png" alt="Mot-doi-lam-bao" width="50">';
+                        break;
+                    case '41':
+                        image = '<img src="img-sanpham/Nguoi-hay-cai.png" alt="Nguoi-hay-cai" width="50">';
+                        break;
+                    case '42':
+                        image = '<img src="img-sanpham/English-Grammar-in-Use.png" alt="English-Grammar-in-Use" width="50">';
+                        break;
+                    case '43':
+                        image = '<img src="img-sanpham/Oxfod-Word-Skills.png" alt="Oxfod-Word-Skills" width="50">';
+                        break;
+                    case '44':
+                        image = '<img src="img-sanpham/IELTS-Academic.png" alt="IELTS-Academic" width="50">';
+                        break;
+                    case '45':
+                        image = '<img src="img-sanpham/Fluent-Forever.png" alt="Fluent-Forever" width="50">';
+                        break;
+                    case '46':
+                        image = '<img src="img-sanpham/The-Elements-of-Style.png" alt="The-Elements-of-Style" width="50">';
+                        break;
+                    case '47':
+                        image = '<img src="img-sanpham/Merriam-Websters.png" alt="Merriam-Websters" width="50">';
+                        break;
+                    case '48':
+                        image = '<img src="img-sanpham/Easy-Learning-French.png" alt="Easy-Learning-French" width="50">';
+                        break;
+                    case '49':
+                        image = '<img src="img-sanpham/Hoc-tieng-Han-that-la-don-gian.png" alt="Hoc-tieng-Han-that-la-don-gian" width="50">';
+                        break;
+                    case '50':
+                        image = '<img src="img-sanpham/Tu-vung-Tieng-Anh.png" alt="Tu-vung-Tieng-Anh" width="50">';
+                        break;
+                    case '51':
+                        image = '<img src="img-sanpham/Spanish-Essentials.png" alt="Spanish-Essentials" width="50">';
+                        break;
+
+                    default:
+                        image = 'Không xác định';
+                }
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                <td>${products.codeProduct}</td>
+                <td>${image}</td>
+                <td>${products.nameProduct}</td>
+                <td>${author}</td>
+                <td>${category}</td>
+                <td>${products.priceProduct}</td>
+                <td><button class="btn btn-primary btn-sm" onclick="editProduct('${products.codeProduct}')">Sửa</button>
+                <button class="btn btn-danger btn-sm" onclick="deleteProduct('${products.codeProduct}')">Xóa</button></td>
+  `;
+                productTable.appendChild(row);
+            });
+        } catch (error) {
+            console.error('Error fetching products:', error);
+        }
+    }
+    async function deleteProduct(codeProduct) {
+        const confirmDelete = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+        if (!confirmDelete) return;
+
+        try {
+            const response = await fetch(`http://localhost:8080/products/${codeProduct}`, {
+                method: 'DELETE'
+            });
+
+            if (response.ok) {
+                // Gọi lại fetchProducts để cập nhật danh sách sản phẩm
+                fetchProducts();
+                alert('Xóa sản phẩm thành công!');
+            } else {
+                alert('Lỗi khi xóa sản phẩm.');
+            }
+        } catch (error) {
+            console.error('Error deleting product:', error);
+        }
+    }
+
+    // Gọi hàm khi trang được tải
+    window.onload = function() {
+        time();        // Gọi hàm time
+        fetchProducts();  // Gọi hàm fetchProducts
+    };
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Báo cáo doanh thu | Quản trị Admin</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/main.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/jquery-3.2.1.min.js"></script>
+    <!-- Thêm jQuery UI cho các tính năng kéo thả -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+    <!-- Thêm FullCalendar -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"></script>
+</head>
+<body class="app sidebar-mini rtl">
+
+<header class="app-header" style="background-color: #ebf5fb">
+    <ul class="app-nav">
+        <li><a class="app-nav__item" href="login.html"><i class='bx bx-log-out bx-rotate-180'></i></a></li>
+    </ul>
+</header>
+
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb ">
+    <div class="app-sidebar__user">
+        <img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px" alt="User Image">
+        <div>
+            <p class="app-sidebar__user-name"><b style="color: #001C40;">Bookify</b></p>
+            <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+        </div>
+    </div>
+    <hr>
+    <ul class="app-menu">
+        <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+        <!-- <li><a class="app-menu__item" href="chat-ai.html"><i class='app-menu__icon bx bx-chat' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Chăm sóc khách hàng</span></a></li> -->
+        <li><a class="app-menu__item" href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+        <li><a class="app-menu__item" href="quan-ly-san-pham.html"><i class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a></li>
+        <li><a class="app-menu__item" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+        <li><a class="app-menu__item active" href="bao-cao-doanh-thu.html"><i class='app-menu__icon bx bx-bar-chart-alt-2' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a></li>
+        <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Lịch công tác</span></a></li>
+        <li><a class="app-menu__item" href="quan-ly-chi-nhanh.html"><i class='app-menu__icon bx bx-store' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý Chi Nhánh</span></a></li>
+    </ul>
+</aside>
+
+<main class="app-content">
+    <div class="app-title">
+        <ul class="app-breadcrumb breadcrumb">
+            <li class="breadcrumb-item">Báo cáo</li>
+            <li class="breadcrumb-item"><a href="#">Báo cáo doanh thu</a></li>
+        </ul>
+        <div id="clock"></div>
+    </div>
+    <div><canvas id="revenueChart" width="600" height="300" style="display: block; margin: 0 auto;"></canvas> <br></div>
+    <div><canvas id="revenueBarChart" width="300" height="300" style="display: block; margin: 0 auto;"></canvas> <br></div>
+    <div><canvas id="categoryRevenueChart" width="700" height="333" style="display: block; margin: 0 auto;"></canvas> <br><br></div>
+    <div class="date-picker-container">
+        <label for="startDate">Ngày bắt đầu:</label>
+        <input type="date" id="startDate">
+
+        <label for="endDate">Ngày kết thúc:</label>
+        <input type="date" id="endDate">
+
+        <button id="filterBtn" style="background-color: #aed6f1 ">Lọc</button>
+    </div>
+    <div>
+        <canvas id="filteredRevenueChart" width="600" height="300" style="display: block; margin: 0 auto;"></canvas>
+    </div>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $('#external-events .fc-event').each(function() {
+
+                // store data so the calendar knows to render an event upon drop
+                $(this).data('event', {
+                    title: $.trim($(this).text()), // use the element's text as the event title
+                    stick: true // maintain when user navigates (see docs on the renderEvent method)
+                });
+
+                // make the event draggable using jQuery UI
+                $(this).draggable({
+                    zIndex: 999,
+                    revert: true,      // will cause the event to go back to its
+                    revertDuration: 0  //  original position after the drag
+                });
+
+            });
+
+            $('#calendar').fullCalendar({
+                header: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'month,agendaWeek,agendaDay'
+                },
+                editable: true,
+                droppable: true, // this allows things to be dropped onto the calendar
+                drop: function() {
+                    // is the "remove after drop" checkbox checked?
+                    if ($('#drop-remove').is(':checked')) {
+                        // if so, remove the element from the "Draggable Events" list
+                        $(this).remove();
+                    }
+                }
+            });
+
+
+        });
+    </script>
+    <script type="text/javascript">
+        //Thời Gian
+        function time() {
+            var today = new Date();
+            var weekday = new Array(7);
+            weekday[0] = "Chủ Nhật";
+            weekday[1] = "Thứ Hai";
+            weekday[2] = "Thứ Ba";
+            weekday[3] = "Thứ Tư";
+            weekday[4] = "Thứ Năm";
+            weekday[5] = "Thứ Sáu";
+            weekday[6] = "Thứ Bảy";
+            var day = weekday[today.getDay()];
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear();
+            var h = today.getHours();
+            var m = today.getMinutes();
+            var s = today.getSeconds();
+            m = checkTime(m);
+            s = checkTime(s);
+            nowTime = h + " giờ " + m + " phút " + s + " giây";
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+            tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+                '</span>';
+            document.getElementById("clock").innerHTML = tmp;
+            clocktime = setTimeout("time()", "1000", "Javascript");
+
+            function checkTime(i) {
+                if (i < 10) {
+                    i = "0" + i;
+                }
+                return i;
+            }
+        }
+    </script>
+    <script>
+        let revenueChart; // Biến toàn cục cho biểu đồ doanh thu tháng
+        let filteredRevenueChart; // Biến toàn cục cho biểu đồ doanh thu đã lọc
+        let revenueBarChart; // Biến toàn cục cho biểu doanh thu năm
+        let categoryRevenueChart; // Biến toàn cục cho biểu đồ doanh thu theo thể loại
+
+        async function fetchBills() {
+            try {
+                const response = await fetch('http://localhost:8080/bills');
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                let bills = await response.json();
+                bills = bills.sort((a, b) => new Date(a.dayOut) - new Date(b.dayOut));
+                return bills;
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+
+        // Nhóm hóa đơn theo tháng
+        function groupBillsByMonth(bills) {
+            const revenueByMonth = {};
+
+            bills.forEach(bill => {
+                const month = new Date(bill.dayOut).toLocaleString('default', { month: 'short', year: 'numeric' });
+
+                // Cộng doanh thu cho mỗi tháng
+                revenueByMonth[month] = (revenueByMonth[month] || 0) + bill.total;
+            });
+
+            return revenueByMonth;
+        }
+
+        function drawRevenueChart(bills) {
+            const revenueByMonth = groupBillsByMonth(bills);
+            const labels = Object.keys(revenueByMonth);
+            const data = Object.values(revenueByMonth);
+
+            if (revenueChart) {
+                revenueChart.destroy(); // Hủy biểu đồ trước nếu đã tồn tại
+            }
+
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            revenueChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu theo tháng',
+                        data: data,
+                        backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        function drawFilteredChart(filteredBills) {
+            // Định dạng ngày để hiển thị trên biểu đồ
+            const labels = filteredBills.map(bill => new Date(bill.dayOut).toLocaleDateString('vi-VN'));  // Định dạng ngày theo kiểu Việt Nam
+            const data = filteredBills.map(bill => bill.total);
+
+            // Kiểm tra nếu đã có biểu đồ cũ thì hủy nó
+            if (filteredRevenueChart) {
+                filteredRevenueChart.destroy(); // Hủy biểu đồ trước đó
+            }
+
+            // Tạo biểu đồ mới cho dữ liệu đã lọc
+            const ctx = document.getElementById('filteredRevenueChart').getContext('2d');
+            filteredRevenueChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu theo ngày đã lọc',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        // Lắng nghe sự kiện click trên nút lọc
+        document.getElementById('filterBtn').addEventListener('click', async () => {
+            const startDateValue = document.getElementById('startDate').value;
+            const endDateValue = document.getElementById('endDate').value;
+
+            // Kiểm tra xem người dùng đã chọn ngày chưa
+            if (!startDateValue || !endDateValue) {
+                alert('Please select a start date and an end date.');
+                return;
+            }
+
+            const startDate = new Date(startDateValue);
+            const endDate = new Date(endDateValue);
+
+            // Đảm bảo rằng ngày kết thúc lớn hơn hoặc bằng ngày bắt đầu
+            if (startDate > endDate) {
+                alert('The start date must be before or equal to the end date.');
+                return;
+            }
+
+            // Lấy dữ liệu hóa đơn
+            const bills = await fetchBills();
+
+            // Lọc hóa đơn theo ngày bắt đầu và kết thúc
+            const filteredBills = bills.filter(bill => {
+                const dayOut = new Date(bill.dayOut);
+                return dayOut >= startDate && dayOut <= endDate;
+            });
+
+            // Kiểm tra nếu không có hóa đơn nào trong khoảng thời gian đã chọn
+            if (filteredBills.length === 0) {
+                alert('There are no bills within this time period.');
+                return;
+            }
+
+            // Vẽ biểu đồ đã lọc
+            drawFilteredChart(filteredBills);
+        });
+
+        // Vẽ biểu đồ lần đầu tiên
+        fetchBills().then(drawRevenueChart);
+
+        function drawRevenueBarChart(bills) {
+            const revenueByYear = {};
+
+            bills.forEach(bill => {
+                const year = new Date(bill.dayOut).getFullYear();
+
+                // Cộng doanh thu cho mỗi năm
+                revenueByYear[year] = (revenueByYear[year] || 0) + bill.total;
+            });
+
+            const labels = Object.keys(revenueByYear);
+            const data = Object.values(revenueByYear);
+
+            const ctx = document.getElementById('revenueBarChart').getContext('2d');
+
+            if (revenueBarChart) {
+                revenueBarChart.destroy(); // Hủy biểu đồ cũ nếu có
+            }
+
+            revenueBarChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu theo năm',
+                        data: data,
+                        backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                        borderColor: 'rgba(255, 99, 132, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+        async function fetchBillData() {
+            try {
+                const response = await fetch('http://localhost:8080/bills');
+                const bills = await response.json();
+                return bills;
+            } catch (error) {
+                console.error('Error fetching bills:', error);
+                return [];
+            }
+        }
+        async function calculateCategoryRevenue() {
+            const bills = await fetchBillData();
+
+            // Khởi tạo object để lưu doanh thu theo từng thể loại
+            const categoryRevenue = {};
+
+            bills.forEach(bill => {
+                bill.Cart.forEach(cartItem => {
+                    const { idCategory, numberProduct, priceProduct } = cartItem;
+                    const revenue = numberProduct * priceProduct; // Doanh thu = số lượng * giá
+
+                    // Cộng dồn doanh thu cho từng thể loại
+                    if (categoryRevenue[idCategory]) {
+                        categoryRevenue[idCategory] += revenue;
+                    } else {
+                        categoryRevenue[idCategory] = revenue;
+                    }
+                });
+            });
+
+            return categoryRevenue;
+        }
+        async function drawCategoryRevenueChart() {
+            const categoryRevenue = await calculateCategoryRevenue();
+            // Tính tổng doanh thu
+            const totalRevenue = Object.values(categoryRevenue).reduce((acc, revenue) => acc + revenue, 0);
+
+            const categoryNames = {
+                1: 'Văn học',
+                2: 'Kinh tế',
+                3: 'Tâm lý',
+                4: 'Giáo dục',
+                5: 'Thiếu nhi',
+                6: 'Hồi ký',
+                7: 'Giáo khoa',
+                8: 'Ngoại ngữ'
+            };
+            // Đảm bảo tất cả thể loại đều có mặt, kể cả khi doanh thu bằng 0
+            Object.keys(categoryNames).forEach(idCategory => {
+                if (!categoryRevenue[idCategory]) {
+                    categoryRevenue[idCategory] = 0; // Nếu không có doanh thu, đặt thành 0
+                }
+            });
+            const sortedCategories = Object.entries(categoryRevenue)
+                .sort(([, revenueA], [, revenueB]) => revenueB - revenueA); // Sắp xếp theo doanh thu
+            sortedCategories.unshift(['Tổng doanh thu', totalRevenue]);
+            const labels = sortedCategories.map(([id]) => id === 'Tổng doanh thu' ? id : categoryNames[id]);
+            const data = sortedCategories.map(([, revenue]) => revenue);
+            const ctx = document.getElementById('categoryRevenueChart').getContext('2d');
+
+            if (typeof categoryRevenueChart !== 'undefined') {
+                categoryRevenueChart.destroy(); // Xóa biểu đồ cũ nếu có
+            }
+
+            categoryRevenueChart = new Chart(ctx, {
+                type: 'bar', // Sử dụng dạng biểu đồ cột ngang
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu theo thể loại',
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y', // Đặt trục Y là trục chính
+                    scales: {
+                        x: {
+                            beginAtZero: true
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top'
+                        }
+                    }
+                }
+            });
+        }
+
+        // Gọi hàm để vẽ biểu đồ hình năm sau khi dữ liệu đã được lấy
+        fetchBills().then(bills => {
+            drawRevenueChart(bills); // Vẽ biểu đồ doanh thu theo tháng
+            drawRevenueBarChart(bills); // Vẽ biểu đồ doanh thu theo năm
+            drawCategoryRevenueChart();
+        });
+
+    </script>
+
+</main>
+
+</body>
+</html>

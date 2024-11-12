@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+  <title>Login Form</title>
+  <style>
+    /* Đặt toàn bộ màn hình với chiều cao 100% */
+    body, html {
+      height: 100%;
+      margin: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Định dạng cho khung đăng nhập */
+    .login-container {
+      width: 300px;
+      padding: 30px;
+      background-color: #ebf5fb;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      margin: auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Căn giữa và cách điệu cho tiêu đề */
+    .login-container h2 {
+      text-align: center;
+      color: #7fb3d5;
+      margin-bottom: 20px;
+    }
+
+    /* Định dạng cho nhãn */
+    .login-container label {
+      font-weight: bold;
+      color: #7fb3d5;
+    }
+
+    /* Định dạng cho các trường input */
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      box-sizing: border-box;
+    }
+
+    /* Định dạng cho nút đăng nhập */
+    .login-btn {
+      width: 100%;
+      padding: 10px;
+      background-color: #7fb3d5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .login-btn:hover {
+      background-color: #aed6f1;
+    }
+
+    /* Tạo khoảng cách giữa các thành phần */
+    .form-group {
+      margin-bottom: 15px;
+    }
+  </style>
+</head>
+<body>
+<div class="login-container">
+  <h2>Login</h2>
+  <br>
+  <!-- Form sẽ gọi hàm JavaScript khi nhấn nút Login -->
+  <form onsubmit="return validateLogin()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <br>
+      <input type="text" id="username" name="username" required>
+    </div>
+    <div class="form-group">
+      <label for="password">Password</label>
+      <br>
+      <input type="password" id="password" name="password" required>
+    </div>
+    <button type="submit" class="login-btn">Login</button>
+    <br>
+  </form>
+</div>
+
+<script>
+  // Hàm kiểm tra username và password
+  function validateLogin() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Kiểm tra nếu username và password đều là "admin"
+    if (username === "admin" && password === "admin") {
+      window.location.href = "index.html"; // Chuyển hướng tới index.html
+      return false; // Ngăn form gửi dữ liệu thực sự
+    } else {
+      alert("Sai tên đăng nhập hoặc mật khẩu!"); // Thông báo khi sai thông tin
+      return false; // Không chuyển hướng khi thông tin không đúng
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Danh sách đơn hàng | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- or -->
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <!-- Font-icon css-->
+  <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+  }
+  table, th, td {
+    border: 1px solid black;
+  }
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .cart-item {
+    list-style: none;
+    padding-left: 0;
+  }
+</style>
+
+<body onload="time()" class="app sidebar-mini rtl">
+
+<!-- Navbar-->
+<header class="app-header" style="background-color: #ebf5fb">
+  <!-- Sidebar toggle button-->
+  <a class="app-sidebar__toggle" href="#" data-toggle="sidebar" aria-label="Hide Sidebar"></a>
+  <!-- Navbar Right Menu-->
+  <ul class="app-nav">
+
+    <!-- User Menu-->
+    <li><a class="app-nav__item" href="login.html"><i class='bx bx-log-out bx-rotate-180'></i> </a>
+    </li>
+  </ul>
+</header>
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px"
+                                      alt="User Image">
+    <div>
+      <p class="app-sidebar__user-name"><b style="color: #001C40;">Bookify</b></p>
+      <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+    <!-- <li><a class="app-menu__item" href="chat-ai.html"><i class='app-menu__icon bx bx-chat' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Chăm sóc khách hàng</span></a></li> -->
+    <li><a class="app-menu__item" href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span
+            class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-san-pham.html"><i
+            class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a>
+    </li>
+    <li><a class="app-menu__item active" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+    <li><a class="app-menu__item" href="bao-cao-doanh-thu.html"><i class='app-menu__icon bx bx-bar-chart-alt-2' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a></li>
+    <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Lịch công tác </span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-chi-nhanh.html"><i class='app-menu__icon bx bx-store' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý Chi Nhánh</span></a></li>
+  </ul>
+</aside>
+
+<main class="app-content">
+  <div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+      <li class="breadcrumb-item active"><a href="#"><b>Danh sách đơn hàng</b></a></li>
+    </ul>
+    <div id="clock"></div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tile">
+        <div class="tile-body">
+        <!--  <div class="row element-button">
+            <div class="col-sm-2">
+              <a class="btn btn-add btn-sm" href="form-add-don-hang.html" title="Thêm"><i class="fas fa-plus"></i>
+                Tạo mới đơn hàng</a>
+            </div>
+          </div> -->
+
+          <table id="bills-table">
+            <thead>
+            <tr>
+              <th>ID hóa đơn</th>
+              <th>Khách hàng</th>
+              <th>Đối tác</th>
+              <th>Tổng cộng</th>
+              <th>Trạng thái</th>
+              <th>Ngày đặt hàng</th>
+              <th>Chi tiết giỏ hàng</th>
+              <th>Chức năng</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- Dữ liệu sẽ được thêm động vào đây -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- Essential javascripts for application to work-->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- <script src="src/jquery.table2excel.js"></script> -->
+<!-- The javascript plugin to display page loading on top-->
+<script src="js/plugins/pace.min.js"></script>
+<!-- Page specific javascripts-->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
+<!-- Data table plugin-->
+<script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
+<script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+<script type="text/javascript">$('#sampleTable').DataTable();</script>
+<script>
+  function deleteRow(r) {
+    var i = r.parentNode.parentNode.rowIndex;
+    document.getElementById("myTable").deleteRow(i);
+  }
+  jQuery(function () {
+    jQuery(".trash").click(function () {
+      swal({
+        title: "Cảnh báo",
+
+        text: "Bạn có chắc chắn là muốn xóa đơn hàng này?",
+        buttons: ["Hủy bỏ", "Đồng ý"],
+      })
+              .then((willDelete) => {
+                if (willDelete) {
+                  swal("Đã xóa thành công.!", {
+
+                  });
+                }
+              });
+    });
+  });
+  oTable = $('#sampleTable').dataTable();
+  $('#all').click(function (e) {
+    $('#sampleTable tbody :checkbox').prop('checked', $(this).is(':checked'));
+    e.stopImmediatePropagation();
+  });
+
+       //Thời Gian
+       function time() {
+    var today = new Date();
+    var weekday = new Array(7);
+    weekday[0] = "Chủ Nhật";
+    weekday[1] = "Thứ Hai";
+    weekday[2] = "Thứ Ba";
+    weekday[3] = "Thứ Tư";
+    weekday[4] = "Thứ Năm";
+    weekday[5] = "Thứ Sáu";
+    weekday[6] = "Thứ Bảy";
+    var day = weekday[today.getDay()];
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    nowTime = h + " giờ " + m + " phút " + s + " giây";
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+    today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+    tmp = '<span class="date"> ' + today + ' - ' + nowTime +
+            '</span>';
+    document.getElementById("clock").innerHTML = tmp;
+    clocktime = setTimeout("time()", "1000", "Javascript");
+
+    function checkTime(i) {
+      if (i < 10) {
+        i = "0" + i;
+      }
+      return i;
+    }
+  }
+
+  //Modal
+  $("#show-emp").on("click", function () {
+    $("#ModalUP").modal({ backdrop: false, keyboard: false })
+  });
+  // Sử dụng Fetch API để gọi đến API lấy tất cả bills
+  fetch('http://localhost:8080/bills')
+          .then(response => response.json())  // Lấy dữ liệu từ API và chuyển thành JSON
+          .then(data => {
+            const billsTableBody = document.querySelector('#bills-table tbody');  // Lấy phần tbody của bảng
+            data.forEach(bill => {  // Duyệt qua từng bill trong dữ liệu nhận được
+              const billRow = document.createElement('tr');  // Tạo hàng mới trong bảng
+
+              // Tạo nội dung của hàng mới
+              billRow.innerHTML = `
+                            <td>${bill.idBill}</td>
+                            <td>${bill.idClient}</td>
+                            <td>${bill.idPartner}</td>
+                            <td>${bill.total}</td>
+                            <td>${bill.status}</td>
+                            <td>${bill.dayOut}</td>
+                            <td>
+                            <ul class="cart-item">
+                                ${bill.Cart.map(item => `
+                                <li>
+                                    <strong>Product:</strong> ${item.nameProduct} <br>
+                                    <strong>Quantity:</strong> ${item.numberProduct} <br>
+                                    <strong>Price:</strong> ${item.priceProduct}
+                                </li>
+                                `).join('')}
+                            </ul>
+                            </td>
+                            <td>
+                            <button class="btn-track-order" onclick="trackOrder('${bill.idBill}')">Theo dõi đơn hàng</button>
+                            </td>`;
+
+              // Thêm hàng mới vào bảng (tbody)
+              billsTableBody.appendChild(billRow);
+            });
+          })
+          .catch(error => console.error('Error fetching bills:', error));
+
+  function trackOrder(billId) {
+    alert(`Theo dõi đơn hàng với ID: ${billId}`);
+    window.location.href = `tracking.html?billId=${billId}`;
+  }
+
+</script>
+</body>
+
+</html>
