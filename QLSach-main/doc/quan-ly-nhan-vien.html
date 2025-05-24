@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Danh sách nhân viên | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Main CSS-->
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <!-- Font-icon css-->
+  <link rel="stylesheet" type="text/css"
+        href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+
+</head>
+
+<body onload="time()" class="app sidebar-mini rtl" style="background-color: #ebf5fb">
+<!-- Navbar-->
+<header class="app-header" style="background-color: #ebf5fb">
+  <!-- Sidebar toggle button--><a class="app-sidebar__toggle" href="#" data-toggle="sidebar"
+                                  aria-label="Hide Sidebar"></a>
+  <!-- Navbar Right Menu-->
+  <ul class="app-nav">
+    <!-- User Menu-->
+    <li><a class="app-nav__item" href="login.html"><i class='bx bx-log-out bx-rotate-180'></i></a></li>
+  </ul>
+</header>
+
+<!-- Sidebar menu-->
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px"
+                                      alt="User Image">
+    <div>
+      <p class="app-sidebar__user-name"><b style="color: #001C40;">Bookify</b></p>
+      <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+   <!-- <li><a class="app-menu__item" href="chat-ai.html"><i class='app-menu__icon bx bx-chat' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Chăm sóc khách hàng</span></a></li> -->
+    <li><a class="app-menu__item active" href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span
+            class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-san-pham.html"><i
+            class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a>
+    </li>
+    <li><a class="app-menu__item" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+    <li><a class="app-menu__item" href="bao-cao-doanh-thu.html"><i class='app-menu__icon bx bx-bar-chart-alt-2' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a></li>
+    <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span
+            class="app-menu__label" style="color: #001C40;">Lịch công tác </span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-chi-nhanh.html"><i class='app-menu__icon bx bx-store' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý Chi Nhánh</span></a></li>
+  </ul>
+</aside>
+
+<main class="app-content">
+  <div class="app-title">
+    <ul class="app-breadcrumb breadcrumb side">
+      <li class="breadcrumb-item active"><a href="#"><b>Danh sách nhân viên</b></a></li>
+    </ul>
+    <div id="clock"></div>
+  </div>
+
+  <!-- Button to redirect to add employee page -->
+  <a href="form-add-nhan-vien.html" class="btn btn-primary mb-3">Thêm Nhân Viên</a>
+
+  <table id="userTable" class="table table-hover table-bordered">
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Họ Tên</th>
+     <!-- <th>Ảnh Thẻ</th> -->
+      <th>Địa Chỉ</th>
+      <th>Ngày Sinh</th>
+      <th>Giới Tính</th>
+      <th>SĐT</th>
+      <th>Chức Vụ</th>
+      <th>Xóa</th>
+    </tr>
+    </thead>
+    <tbody id="employeeTable">
+    <!-- Dữ liệu nhân viên sẽ được thêm vào đây -->
+    </tbody>
+  </table>
+</main>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+  // Function to load current time
+  function time() {
+    var today = new Date();
+    var weekday = ["Chủ Nhật", "Thứ Hai", "Thứ Ba", "Thứ Tư", "Thứ Năm", "Thứ Sáu", "Thứ Bảy"];
+    var day = weekday[today.getDay()];
+    var dd = today.getDate();
+    var mm = today.getMonth() + 1; // Tháng bắt đầu từ 0
+    var yyyy = today.getFullYear();
+    var h = today.getHours();
+    var m = today.getMinutes();
+    var s = today.getSeconds();
+    m = checkTime(m);
+    s = checkTime(s);
+    nowTime = h + " giờ " + m + " phút " + s + " giây";
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+    today = day + ', ' + dd + '/' + mm + '/' + yyyy;
+    tmp = '<span class="date"> ' + today + ' - ' + nowTime + '</span>';
+    document.getElementById("clock").innerHTML = tmp;
+    clocktime = setTimeout("time()", 1000);
+  }
+
+  function checkTime(i) {
+    if (i < 10) {
+      i = "0" + i;
+    }
+    return i;
+  }
+
+  async function fetchEmployees() {
+    try {
+      const response = await fetch('http://localhost:8080/employees');
+      const employees = await response.json();
+
+      const employeeTable = document.getElementById('employeeTable');
+      employeeTable.innerHTML = ''; // Xóa nội dung cũ
+
+      employees.forEach(employee => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+    <td>${employee.employeeId}</td>
+    <td>${employee.employeeName}</td>
+    <!-- <td><img src="${employee.avatar}" alt="Ảnh Thẻ" width="50"></td>  -->
+    <td>${employee.employeeAddress}</td>
+    <td>${new Date(employee.employeeDOB).toLocaleDateString()}</td>
+    <td>${employee.employeeGender}</td>
+    <td>${employee.employeePhone}</td>
+    <td>${employee.employeePosition}</td>
+    <td><button class="btn btn-danger btn-sm" onclick="deleteEmployee('${employee.employeeId}')">Xóa</button></td>
+  `;
+        employeeTable.appendChild(row);
+      });
+    } catch (error) {
+      console.error('Error fetching employees:', error);
+    }
+  }
+  async function deleteEmployee(employeeId) {
+    const confirmDelete = confirm("Bạn có chắc chắn muốn xóa nhân viên này không?");
+    if (!confirmDelete) return;
+
+    try {
+      const response = await fetch(`http://localhost:8080/employees/${employeeId}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        // Gọi lại fetchEmployees để cập nhật danh sách nhân viên
+        fetchEmployees();
+        alert('Xóa nhân viên thành công!');
+      } else {
+        alert('Lỗi khi xóa nhân viên.');
+      }
+    } catch (error) {
+      console.error('Error deleting employee:', error);
+    }
+  }
+
+  window.onload = function() {
+    time();        // Gọi hàm time
+    fetchEmployees();  // Gọi hàm fetchEmployees
+  };
+
+</script>
+</body>
+</html>

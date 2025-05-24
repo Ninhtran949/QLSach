@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Thêm sản phẩm | Quản trị Admin</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="css/main.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"></script>
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.css">
+  <script type="text/javascript" src="/ckeditor/ckeditor.js"></script>
+  <script src="http://code.jquery.com/jquery.min.js" type="text/javascript"></script>
+</head>
+
+<body class="app sidebar-mini rtl">
+<header class="app-header" style="background-color: #ebf5fb">
+  <ul class="app-nav">
+    <li><a class="app-nav__item" href="login.html"><i class='bx bx-log-out bx-rotate-180'></i> </a></li>
+  </ul>
+</header>
+
+<div class="app-sidebar__overlay" data-toggle="sidebar"></div>
+<aside class="app-sidebar" style="background-color: #ebf5fb">
+  <div class="app-sidebar__user"><img class="app-sidebar__user-avatar" src="/images/logo.jpg" width="50px" alt="User Image">
+    <div>
+      <p class="app-sidebar__user-name"><b style="color: #001C40;">Bookify</b></p>
+      <p class="app-sidebar__user-designation" style="color: #001C40;">Chào mừng bạn trở lại</p>
+    </div>
+  </div>
+  <hr>
+  <ul class="app-menu">
+    <li><a class="app-menu__item" href="index.html"><i class='app-menu__icon bx bx-tachometer' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý khách hàng</span></a></li>
+   <!-- <li><a class="app-menu__item" href="chat-ai.html"><i class='app-menu__icon bx bx-chat' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Chăm sóc khách hàng</span></a></li> -->
+    <li><a class="app-menu__item" href="quan-ly-nhan-vien.html"><i class='app-menu__icon bx bx-id-card' style="color: #001C40;"></i> <span class="app-menu__label" style="color: #001C40;">Quản lý nhân viên</span></a></li>
+    <li><a class="app-menu__item active" href="quan-ly-san-pham.html"><i class='app-menu__icon bx bx-purchase-tag-alt' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý sản phẩm</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-don-hang.html"><i class='app-menu__icon bx bx-task' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý đơn hàng</span></a></li>
+    <li><a class="app-menu__item" href="bao-cao-doanh-thu.html"><i class='app-menu__icon bx bx-bar-chart-alt-2' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Báo cáo doanh thu</span></a></li>
+    <li><a class="app-menu__item" href="lich-cong-tac.html"><i class='app-menu__icon bx bx-calendar-check' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Lịch công tác</span></a></li>
+    <li><a class="app-menu__item" href="quan-ly-chi-nhanh.html"><i class='app-menu__icon bx bx-store' style="color: #001C40;"></i><span class="app-menu__label" style="color: #001C40;">Quản lý Chi Nhánh</span></a></li>
+  </ul>
+</aside>
+
+<main class="app-content">
+  <div class="app-title">
+    <ul class="app-breadcrumb breadcrumb">
+      <li class="breadcrumb-item">Danh sách sản phẩm</li>
+      <li class="breadcrumb-item"><a href="#">Thêm sản phẩm</a></li>
+    </ul>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <div class="tile">
+        <h3 class="tile-title">Tạo mới sản phẩm</h3>
+        <div class="tile-body">
+          <form id="addProductForm">
+            <div class="form-group">
+              <label for="codeProduct">ID</label>
+              <input class="form-control" type="text" id="codeProduct" name="codeProduct" placeholder="Nhập ID sách" required>
+            </div>
+            <div class="form-group">
+              <label for="nameProduct">Tên sách</label>
+              <input class="form-control" type="text" id="nameProduct" name="nameProduct" placeholder="Nhập tên sách" required>
+            </div>
+           <!-- <div class="form-group">
+              <label for="author">Tác giả</label>
+              <input class="form-control" type="text" id="author" name="author" placeholder="Nhập tên tác giả" required>
+            </div> -->
+            <div class="form-group">
+              <label for="codeCategory">Thể loại</label>
+              <select class="form-control" id="codeCategory" name="codeCategory" required>
+                <option value="1">1 - Văn học</option>
+                <option value="2">2 - Kinh tế</option>
+                <option value="3">3 - Tâm lý</option>
+                <option value="4">4 - Giáo dục</option>
+                <option value="5">5 - Thiếu nhi</option>
+                <option value="6">6 - Hồi ký</option>
+                <option value="7">7 - Giáo khoa</option>
+                <option value="8">8 - Ngoại ngữ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="userPartner">Đối tác</label>
+              <input class="form-control" type="text" id="userPartner" name="userPartner" placeholder="Nhập tên đối tác" required>
+            </div>
+            <div class="form-group">
+              <label for="priceProduct">Giá tiền</label>
+              <input class="form-control" type="text" id="priceProduct" name="priceProduct" placeholder="Nhập giá tiền" required>
+            </div>
+            <button class="btn btn-primary" type="submit">Lưu</button>
+            <a href="quan-ly-san-pham.html" class="btn btn-secondary">Quay lại</a>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/popper.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/main.js"></script>
+<script src="js/plugins/pace.min.js"></script>
+
+<script>
+  document.getElementById('addProductForm').addEventListener('submit', async function (event) {
+    event.preventDefault(); // Ngăn chặn gửi form mặc định
+
+    // Lấy thông tin từ form
+    const productData = {
+      codeProduct: document.getElementById('codeProduct').value,
+      nameProduct: document.getElementById('nameProduct').value,
+      userPartner: document.getElementById('userPartner').value,
+      codeCategory: document.getElementById('codeCategory').value,
+      priceProduct: document.getElementById('priceProduct').value
+    };
+
+    try {
+      // Gửi yêu cầu POST tới API để thêm sản phẩm
+      const response = await fetch('http://localhost:8080/products', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(productData),
+      });
+
+      if (response.ok) {
+        alert('Sách đã được thêm thành công!');
+        window.location.href = 'quan-ly-san-pham.html';  // Chuyển hướng sau khi thêm thành công
+      } else {
+        const errorMessage = await response.text();
+        alert('Đã xảy ra lỗi khi thêm sách: ' + errorMessage);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  });
+</script>
+</body>
+
+</html>
