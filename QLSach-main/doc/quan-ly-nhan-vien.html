@@ -131,7 +131,7 @@
 
   async function fetchEmployees() {
     try {
-      const response = await fetch('http://localhost:8080/employees');
+      const response = await fetch('http://3.107.214.196:8080/employees');
       const employees = await response.json();
 
       const employeeTable = document.getElementById('employeeTable');
@@ -161,7 +161,7 @@
     if (!confirmDelete) return;
 
     try {
-      const response = await fetch(`http://localhost:8080/employees/${employeeId}`, {
+      const response = await fetch(`http://3.107.214.196:8080/employees/${employeeId}`, {
         method: 'DELETE'
       });
 

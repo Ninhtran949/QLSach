@@ -182,7 +182,7 @@
     chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
   };
 
-  const ws = new WebSocket('ws://localhost:8080'); // Cập nhật URL của máy chủ WebSocket của bạn
+  const ws = new WebSocket('ws://3.107.214.196:8080'); // Cập nhật URL của máy chủ WebSocket của bạn
 
   ws.onopen = function() {
     console.log('Đã kết nối với máy chủ WebSocket');
@@ -264,7 +264,7 @@
   }
   async function fetchUsers() {
     try {
-      const response = await fetch('http://localhost:8080/user');
+      const response = await fetch('http://3.107.214.196:8080/user');
       const users = await response.json();
 
       const userTable = document.getElementById('userTable').querySelector('tbody');
