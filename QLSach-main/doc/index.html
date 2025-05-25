@@ -182,7 +182,7 @@
     chatBox.style.display = chatBox.style.display === 'none' ? 'flex' : 'none';
   };
 
-  const ws = new WebSocket('ws://3.107.214.196:8080'); // Cập nhật URL của máy chủ WebSocket của bạn
+  const ws = new WebSocket('wss://book-store-api-ewcr.onrender.com'); // Cập nhật URL của máy chủ WebSocket của bạn
 
   ws.onopen = function() {
     console.log('Đã kết nối với máy chủ WebSocket');
