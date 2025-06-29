@@ -113,4 +113,21 @@ router.get('/product/:productId', async (req, res) => {
   }
 });
 
+// PUT /books/product/:productId
+router.put('/:productId', async (req, res) => {
+  try {
+    const updatedBook = await Book.findOneAndUpdate(
+      { productId: req.params.productId },
+      req.body,
+      { new: true }
+    );
+    if (!updatedBook) {
+      return res.status(404).json({ message: 'Book not found' });
+    }
+    res.json(updatedBook);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+});
+
 module.exports = router;
