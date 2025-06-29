@@ -71,7 +71,7 @@ io.on('connection', (socket) => {
 // Khởi chạy server
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://3.107.214.196:${PORT}`);
+  console.log(`Server is running on http://192.168.0.11:${PORT}`);
 });
 
 // Xuất io để sử dụng trong các router nếu cần

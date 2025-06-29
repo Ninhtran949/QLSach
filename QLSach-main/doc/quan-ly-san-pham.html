@@ -104,6 +104,10 @@
     </div>
 
     <!-- ---------Modal----------- -->
+    <!-- Thêm overlay -->
+    <div id="editOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+    <!-- Cập nhật form container -->
     <div id="editFormContainer" style="display: none;">
         <h3>Chỉnh sửa sản phẩm</h3>
         <form id="editForm">
@@ -124,8 +128,10 @@
                 <label for="editProductPrice">Giá tiền:</label>
                 <input type="text" id="editProductPrice" required>
             </div>
-            <button type="button" onclick="updateProduct()">Cập nhật</button>
-            <button type="button" onclick="cancelEdit()">Hủy</button>
+            <div>
+                <button type="button" onclick="updateProduct()">Cập nhật</button>
+                <button type="button" onclick="cancelEdit()">Hủy</button>
+            </div>
         </form>
     </div>
 
@@ -145,6 +151,61 @@
 <!-- Data table plugin-->
 <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+<style>
+#editFormContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    width: 400px;
+    max-width: 90%;
+}
+
+#editFormContainer h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+#editFormContainer div {
+    margin-bottom: 15px;
+}
+
+#editFormContainer label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#editFormContainer input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#editFormContainer button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#editFormContainer button[onclick="updateProduct()"] {
+    background-color: #007bff;
+    color: white;
+}
+
+#editFormContainer button[onclick="cancelEdit()"] {
+    background-color: #6c757d;
+    color: white;
+}
+</style>
 <script type="text/javascript">
     $('#sampleTable').DataTable();
     //Thời Gian
@@ -189,7 +250,7 @@
     }
     async function fetchProducts() {
         try {
-            const response = await fetch('http://3.107.214.196:8080/products');
+            const response = await fetch('http://192.168.0.11:8080/products');
             const products = await response.json();
 
             const productTable = document.getElementById('productTable');
@@ -565,7 +626,7 @@
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://3.107.214.196:8080/products/${codeProduct}`, {
+            const response = await fetch(`http://192.168.0.11:8080/products/${codeProduct}`, {
                 method: 'DELETE'
             });
 
@@ -579,6 +640,118 @@
         } catch (error) {
             console.error('Error deleting product:', error);
         }
+    }
+
+    function updateProduct() {
+        console.log('updateProduct called'); // Debug log
+        
+        const codeProduct = document.getElementById('editProductId').value;
+        const nameProduct = document.getElementById('editProductName').value;
+        const author = document.getElementById('editProductAuthor').value;
+        const codeCategory = document.getElementById('editProductCategory').value;
+        const priceProduct = document.getElementById('editProductPrice').value;
+
+        console.log('Data to update:', {
+            codeProduct,
+            nameProduct,
+            author,
+            codeCategory,
+            priceProduct
+        });
+
+        // Gửi PATCH request lên server
+        fetch(`http://192.168.0.11:8080/products/${codeProduct}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nameProduct: nameProduct,
+                codeCategory: codeCategory,
+                priceProduct: priceProduct,
+                userPartner: author // Thêm trường này nếu cần
+            })
+        })
+        .then(response => {
+            console.log('Update response status:', response.status);
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Update successful:', data);
+            alert('Cập nhật sản phẩm thành công!');
+            document.getElementById('editFormContainer').style.display = 'none';
+            document.getElementById('editOverlay').style.display = 'none'; // Nếu có overlay
+            fetchProducts(); // Làm mới danh sách
+        })
+        .catch(error => {
+            console.error('Update error:', error);
+            alert('Có lỗi xảy ra khi cập nhật sản phẩm: ' + error.message);
+        });
+    }
+
+    function cancelEdit() {
+        document.getElementById('editFormContainer').style.display = 'none';
+        document.getElementById('editOverlay').style.display = 'none';
+    }
+
+    function editProduct(codeProduct) {
+        console.log('Editing product:', codeProduct);
+        
+        // Thêm debug để kiểm tra element tồn tại
+        const formContainer = document.getElementById('editFormContainer');
+        console.log('Form container found:', formContainer);
+        
+        if (!formContainer) {
+            console.error('editFormContainer not found!');
+            return;
+        }
+        
+        // Hiển thị form chỉnh sửa
+        formContainer.style.display = 'block';
+        console.log('Form display set to block');
+        
+        // Scroll to form để đảm bảo user nhìn thấy
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+
+        // Lấy dữ liệu sản phẩm từ server
+        fetch(`http://192.168.0.11:8080/products/code/${codeProduct}`)
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) throw new Error('Không tìm thấy sản phẩm!');
+                return response.json();
+            })
+            .then(product => {
+                console.log('Product data:', product);
+                
+                // Debug từng field
+                const fields = {
+                    'editProductId': product.codeProduct || '',
+                    'editProductName': product.nameProduct || '',
+                    'editProductAuthor': product.userPartner || '',
+                    'editProductCategory': product.codeCategory || '',
+                    'editProductPrice': product.priceProduct || ''
+                };
+                
+                Object.keys(fields).forEach(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        element.value = fields[fieldId];
+                        console.log(`Set ${fieldId} = ${fields[fieldId]}`);
+                    } else {
+                        console.error(`Element ${fieldId} not found!`);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Không tìm thấy sản phẩm!');
+                formContainer.style.display = 'none';
+            });
     }
 
     // Gọi hàm khi trang được tải
