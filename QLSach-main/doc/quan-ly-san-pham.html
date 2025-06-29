@@ -104,6 +104,10 @@
     </div>
 
     <!-- ---------Modal----------- -->
+    <!-- Thêm overlay -->
+    <div id="editOverlay" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 999;"></div>
+
+    <!-- Cập nhật form container -->
     <div id="editFormContainer" style="display: none;">
         <h3>Chỉnh sửa sản phẩm</h3>
         <form id="editForm">
@@ -124,9 +128,80 @@
                 <label for="editProductPrice">Giá tiền:</label>
                 <input type="text" id="editProductPrice" required>
             </div>
-            <button type="button" onclick="updateProduct()">Cập nhật</button>
-            <button type="button" onclick="cancelEdit()">Hủy</button>
+            <div>
+                <button type="button" onclick="updateProduct()">Cập nhật</button>
+                <button type="button" onclick="cancelEdit()">Hủy</button>
+            </div>
         </form>
+    </div>
+
+    <!-- Modal Chi tiết sản phẩm -->
+    <div id="detailModal">
+        <div class="detail-modal-content">
+            <div class="detail-modal-header">
+                <h2>Chi tiết sản phẩm</h2>
+                <span class="close-detail">&times;</span>
+            </div>
+            <form id="detailForm">
+                <input type="hidden" id="detailProductId">
+                
+                <!-- Thông tin cơ bản -->
+                <div class="detail-form-row">
+                    <div class="detail-form-group">
+                        <label for="detailProductName">Tên sách:</label>
+                        <input type="text" id="detailProductName" readonly>
+                    </div>
+                    <div class="detail-form-group">
+                        <label for="detailProductPrice">Giá tiền:</label>
+                        <input type="text" id="detailProductPrice" readonly>
+                    </div>
+                </div>
+                
+                <!-- Thông tin chi tiết từ Book model -->
+                <div class="detail-form-row">
+                    <div class="detail-form-group">
+                        <label for="detailAuthor">Tác giả:</label>
+                        <input type="text" id="detailAuthor" required>
+                    </div>
+                    <div class="detail-form-group">
+                        <label for="detailCategory">Thể loại:</label>
+                        <input type="text" id="detailCategory" required>
+                    </div>
+                </div>
+                
+                <div class="detail-form-row">
+                    <div class="detail-form-group">
+                        <label for="detailISBN">ISBN-13:</label>
+                        <input type="text" id="detailISBN" placeholder="Nhập mã ISBN-13">
+                    </div>
+                    <div class="detail-form-group">
+                        <label for="detailPublisher">Nhà xuất bản:</label>
+                        <input type="text" id="detailPublisher" placeholder="Nhập nhà xuất bản">
+                    </div>
+                </div>
+                
+                <div class="detail-form-row">
+                    <div class="detail-form-group">
+                        <label for="detailPublicationDate">Ngày xuất bản:</label>
+                        <input type="date" id="detailPublicationDate">
+                    </div>
+                    <div class="detail-form-group">
+                        <label for="detailPages">Số trang:</label>
+                        <input type="number" id="detailPages" min="0" placeholder="Nhập số trang">
+                    </div>
+                </div>
+                
+                <div class="detail-form-group">
+                    <label for="detailOverview">Mô tả tổng quan:</label>
+                    <textarea id="detailOverview" placeholder="Nhập mô tả chi tiết về sách..."></textarea>
+                </div>
+                
+                <div class="detail-form-actions">
+                    <button type="button" class="btn-cancel-detail">Hủy</button>
+                    <button type="button" class="btn-save-detail">Lưu thay đổi</button>
+                </div>
+            </form>
+        </div>
     </div>
 
 </main>
@@ -145,6 +220,203 @@
 <!-- Data table plugin-->
 <script type="text/javascript" src="js/plugins/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="js/plugins/dataTables.bootstrap.min.js"></script>
+<style>
+#editFormContainer {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    border: 2px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    z-index: 1000;
+    width: 400px;
+    max-width: 90%;
+}
+
+#editFormContainer h3 {
+    margin-top: 0;
+    color: #333;
+}
+
+#editFormContainer div {
+    margin-bottom: 15px;
+}
+
+#editFormContainer label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+#editFormContainer input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+#editFormContainer button {
+    margin-right: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#editFormContainer button[onclick="updateProduct()"] {
+    background-color: #007bff;
+    color: white;
+}
+
+#editFormContainer button[onclick="cancelEdit()"] {
+    background-color: #6c757d;
+    color: white;
+}
+
+/* Modal chi tiết */
+#detailModal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.5);
+}
+
+.detail-modal-content {
+    background-color: #fefefe;
+    margin: 2% auto;
+    padding: 20px;
+    border: none;
+    border-radius: 8px;
+    width: 80%;
+    max-width: 800px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+.detail-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #007bff;
+}
+
+.detail-modal-header h2 {
+    color: #007bff;
+    margin: 0;
+}
+
+.close-detail {
+    color: #aaa;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.close-detail:hover {
+    color: #000;
+}
+
+.detail-form-row {
+    display: flex;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+
+.detail-form-group {
+    flex: 1;
+}
+
+.detail-form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.detail-form-group input,
+.detail-form-group textarea,
+.detail-form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+.detail-form-group input:focus,
+.detail-form-group textarea:focus,
+.detail-form-group select:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 5px rgba(0,123,255,0.3);
+}
+
+.detail-form-group textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.detail-form-actions {
+    text-align: right;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+.detail-form-actions button {
+    margin-left: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.btn-save-detail {
+    background-color: #28a745;
+    color: white;
+}
+
+.btn-save-detail:hover {
+    background-color: #218838;
+}
+
+.btn-cancel-detail {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-cancel-detail:hover {
+    background-color: #5a6268;
+}
+
+.btn-detail {
+    background-color: #17a2b8;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 12px;
+    margin-right: 5px;
+}
+
+.btn-detail:hover {
+    background-color: #138496;
+}
+</style>
 <script type="text/javascript">
     $('#sampleTable').DataTable();
     //Thời Gian
@@ -189,7 +461,7 @@
     }
     async function fetchProducts() {
         try {
-            const response = await fetch('http://localhost:8080/products');
+            const response = await fetch('http://3.107.214.196:8080/products');
             const products = await response.json();
 
             const productTable = document.getElementById('productTable');
@@ -384,163 +656,17 @@
                         break;
                 }
                 let image;
-                switch (products.codeProduct) {
-                    case '1':
-                        image = '<img src="img-sanpham/Nhung-nguoi-khon-kho.jpg" alt="Nhung-nguoi-khon-kho" width="50">';
-                        break;
-                    case '2':
-                        image = '<img src="img-sanpham/Nguoi-trong-bao.jpg" alt="Nguoi-trong-bao" width="50">';
-                        break;
-                    case '3':
-                        image = '<img src="img-sanpham/Hai-dua-tre.jpg" alt="Hai-dua-tre" width="50">';
-                        break;
-                    case '4':
-                        image = '<img src="img-sanpham/Emile-hay-la-ve-giao-duc.jpg" alt="Emile-hay-la-ve-giao-duc" width="50">';
-                        break;
-                    case '5':
-                        image = '<img src="img-sanpham/Dac-nhan-tam.jpg" alt="Dac-nhan-tam" width="50">';
-                        break;
-                    case '6':
-                        image = '<img src="img-sanpham/Tam-ly-hoc-hanh-vi.jpg" alt="Tam-ly-hoc-hanh-vi" width="50">';
-                        break;
-                    case '7':
-                        image = '<img src="img-sanpham/kinh-te-so.jpg" alt="kinh-te-so" width="50">';
-                        break;
-                    case '8':
-                        image = '<img src="img-sanpham/The-gioi-phang.jpg" alt="The-gioi-phang" width="50">';
-                        break;
-                    case '9':
-                        image = '<img src="img-sanpham/Kinh-te-hoc.jpg" alt="Kinh-te-hoc" width="50">';
-                        break;
-                    case '10':
-                        image = '<img src="img-sanpham/Di-tim-le-song.jpg" alt="Di-tim-le-song" width="50">';
-                        break;
-                    case '11':
-                        image = '<img src="img-sanpham/Khi-nao-cuop-nha-bang.jpg" alt="Khi-nao-cuop-nha-bang" width="50">';
-                        break;
-                    case '12':
-                        image = '<img src="img-sanpham/Tam-ly-hoc-toi-pham.jpg" alt="Tam-ly-hoc-toi-pham" width="50">';
-                        break;
-                    case '13':
-                        image = '<img src="img-sanpham/Tam-ly-hoc-ve-tien.jpg" alt="Tam-ly-hoc-ve-tien" width="50">';
-                        break;
-                    case '14':
-                        image = '<img src="img-sanpham/8-vu-an-hoan-hao.jpg" alt="8-vu-an-hoan-hao" width="50">';
-                        break;
-                    case '15':
-                        image = '<img src="img-sanpham/Hoang-tu-be.jpg" alt="Hoang-tu-be" width="50">';
-                        break;
-                    case '16':
-                        image = '<img src="img-sanpham/So-do.jpg" alt="So-do" width="50">';
-                        break;
-                    case '17':
-                        image = '<img src="img-sanpham/Tuoi-20-toi-da-song-nhu-mot-bong-hoa-dai.jpg" alt="Tuoi-20-toi-da-song-nhu-mot-bong-hoa-dai" width="50">';
-                        break;
-                    case '18':
-                        image = '<img src="img-sanpham/Toi-tu-hoc.png" alt="Toi-tu-hoc" width="50">';
-                        break;
-                    case '19':
-                        image = '<img src="img-sanpham/Giao-duc-VN-duoi-thoi-thuoc-dia.png" alt="Giao-duc-VN-duoi-thoi-thuoc-dia" width="50">';
-                        break;
-                    case '20':
-                        image = '<img src="img-sanpham/Day-con-lam-giau.png" alt="Day-con-lam-giau" width="50">';
-                        break;
-                    case '21':
-                        image = '<img src="img-sanpham/Hoc-tu-that-bai.png" alt="Hoc-tu-that-bai" width="50">';
-                        break;
-                    case '22':
-                        image = '<img src="img-sanpham/Ben-le-con-chu.png" alt="Ben-le-con-chu" width="50">';
-                        break;
-                    case '23':
-                        image = '<img src="img-sanpham/Nhung-tam-long-cao-ca.png" alt="Nhung-tam-long-cao-ca" width="50">';
-                        break;
-                    case '24':
-                        image = '<img src="img-sanpham/Giao-duc-nhan-ban.png" alt="Giao-duc-nhan-ban" width="50">';
-                        break;
-                    case '25':
-                        image = '<img src="img-sanpham/De-me-phieu-luu-ky.png" alt="De-me-phieu-luu-ky" width="50">';
-                        break;
-                    case '26':
-                        image = '<img src="img-sanpham/Kinh-van-hoa.png" alt="Kinh-van-hoa" width="50">';
-                        break;
-                    case '27':
-                        image = '<img src="img-sanpham/Cho-toi-xin-1-ve-di-tuoi-tho.png" alt="Cho-toi-xin-1-ve-di-tuoi-tho" width="50">';
-                        break;
-                    case '28':
-                        image = '<img src="img-sanpham/Co-be-ban-diem.png" alt="Co-be-ban-diem" width="50">';
-                        break;
-                    case '29':
-                        image = '<img src="img-sanpham/Truyen-co-tich-VN.png" alt="Truyen-co-tich-VN" width="50">';
-                        break;
-                    case '30':
-                        image = '<img src="img-sanpham/Nghin-le-mot-dem.png" alt="Nghin-le-mot-dem" width="50">';
-                        break;
-                    case '31':
-                        image = '<img src="img-sanpham/Song-nhu-nhung-doa-hoa.png" alt="Song-nhu-nhung-doa-hoa" width="50">';
-                        break;
-                    case '32':
-                        image = '<img src="img-sanpham/Vua-nham-mat-vua-mo-cua-so.png" alt="Vua-nham-mat-vua-mo-cua-so" width="50">';
-                        break;
-                    case '33':
-                        image = '<img src="img-sanpham/Nhung-ngay-tho-au.png" alt="Nhung-ngay-tho-au" width="50">';
-                        break;
-                    case '34':
-                        image = '<img src="img-sanpham/Cat-bui-chan-ai.png" alt="Cat-bui-chan-ai." width="50">';
-                        break;
-                    case '35':
-                        image = '<img src="img-sanpham/Hoi-ky-1940-1945.png" alt="Hoi-ky-1940-1945" width="50">';
-                        break;
-                    case '36':
-                        image = '<img src="img-sanpham/Doi-mat.png" alt="Doi-mat" width="50">';
-                        break;
-                    case '37':
-                        image = '<img src="img-sanpham/Toi-di-hoc.png" alt="Toi-di-hoc" width="50">';
-                        break;
-                    case '38':
-                        image = '<img src="img-sanpham/Thep-da-toi-the-day.png" alt="Thep-da-toi-the-day" width="50">';
-                        break;
-                    case '39':
-                        image = '<img src="img-sanpham/Toi-hoc-dai-hoc.png" alt="Toi-hoc-dai-hoc" width="50">';
-                        break;
-                    case '40':
-                        image = '<img src="img-sanpham/Mot-doi-lam-bao.png" alt="Mot-doi-lam-bao" width="50">';
-                        break;
-                    case '41':
-                        image = '<img src="img-sanpham/Nguoi-hay-cai.png" alt="Nguoi-hay-cai" width="50">';
-                        break;
-                    case '42':
-                        image = '<img src="img-sanpham/English-Grammar-in-Use.png" alt="English-Grammar-in-Use" width="50">';
-                        break;
-                    case '43':
-                        image = '<img src="img-sanpham/Oxfod-Word-Skills.png" alt="Oxfod-Word-Skills" width="50">';
-                        break;
-                    case '44':
-                        image = '<img src="img-sanpham/IELTS-Academic.png" alt="IELTS-Academic" width="50">';
-                        break;
-                    case '45':
-                        image = '<img src="img-sanpham/Fluent-Forever.png" alt="Fluent-Forever" width="50">';
-                        break;
-                    case '46':
-                        image = '<img src="img-sanpham/The-Elements-of-Style.png" alt="The-Elements-of-Style" width="50">';
-                        break;
-                    case '47':
-                        image = '<img src="img-sanpham/Merriam-Websters.png" alt="Merriam-Websters" width="50">';
-                        break;
-                    case '48':
-                        image = '<img src="img-sanpham/Easy-Learning-French.png" alt="Easy-Learning-French" width="50">';
-                        break;
-                    case '49':
-                        image = '<img src="img-sanpham/Hoc-tieng-Han-that-la-don-gian.png" alt="Hoc-tieng-Han-that-la-don-gian" width="50">';
-                        break;
-                    case '50':
-                        image = '<img src="img-sanpham/Tu-vung-Tieng-Anh.png" alt="Tu-vung-Tieng-Anh" width="50">';
-                        break;
-                    case '51':
-                        image = '<img src="img-sanpham/Spanish-Essentials.png" alt="Spanish-Essentials" width="50">';
-                        break;
-
-                    default:
-                        image = 'Không xác định';
+                if (products.imgProduct) {
+                    // Kiểm tra nếu là base64 (JPEG hoặc PNG)
+                    if (products.imgProduct.startsWith('/9j/')) {
+                        image = `<img src="data:image/jpeg;base64,${products.imgProduct}" alt="${products.nameProduct}" width="50">`;
+                    } else if (products.imgProduct.startsWith('iVBORw0KGgo')) {
+                        image = `<img src="data:image/png;base64,${products.imgProduct}" alt="${products.nameProduct}" width="50">`;
+                    } else {
+                        image = `<img src="${products.imgProduct}" alt="${products.nameProduct}" width="50">`;
+                    }
+                } else {
+                    image = 'Không xác định';
                 }
 
                 const row = document.createElement('tr');
@@ -551,9 +677,12 @@
                 <td>${author}</td>
                 <td>${category}</td>
                 <td>${products.priceProduct}</td>
-                <td><button class="btn btn-primary btn-sm" onclick="editProduct('${products.codeProduct}')">Sửa</button>
-                <button class="btn btn-danger btn-sm" onclick="deleteProduct('${products.codeProduct}')">Xóa</button></td>
-  `;
+                <td>
+                    <button class="btn btn-info btn-sm btn-detail" onclick="showProductDetail('${products._id}')">Chi tiết</button>
+                    <button class="btn btn-primary btn-sm" onclick="editProduct('${products.codeProduct}')">Sửa</button>
+                    <button class="btn btn-danger btn-sm" onclick="deleteProduct('${products.codeProduct}')">Xóa</button>
+                </td>
+            `;
                 productTable.appendChild(row);
             });
         } catch (error) {
@@ -565,7 +694,7 @@
         if (!confirmDelete) return;
 
         try {
-            const response = await fetch(`http://localhost:8080/products/${codeProduct}`, {
+            const response = await fetch(`http://3.107.214.196:8080/products/${codeProduct}`, {
                 method: 'DELETE'
             });
 
@@ -580,6 +709,219 @@
             console.error('Error deleting product:', error);
         }
     }
+
+    function updateProduct() {
+        console.log('updateProduct called'); // Debug log
+        
+        const codeProduct = document.getElementById('editProductId').value;
+        const nameProduct = document.getElementById('editProductName').value;
+        const author = document.getElementById('editProductAuthor').value;
+        const codeCategory = document.getElementById('editProductCategory').value;
+        const priceProduct = document.getElementById('editProductPrice').value;
+
+        console.log('Data to update:', {
+            codeProduct,
+            nameProduct,
+            author,
+            codeCategory,
+            priceProduct
+        });
+
+        // Gửi PATCH request lên server
+        fetch(`http://3.107.214.196:8080/products/${codeProduct}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                nameProduct: nameProduct,
+                codeCategory: codeCategory,
+                priceProduct: priceProduct,
+                userPartner: author // Thêm trường này nếu cần
+            })
+        })
+        .then(response => {
+            console.log('Update response status:', response.status);
+            if (!response.ok) {
+                return response.text().then(text => {
+                    throw new Error(`HTTP ${response.status}: ${text}`);
+                });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Update successful:', data);
+            alert('Cập nhật sản phẩm thành công!');
+            document.getElementById('editFormContainer').style.display = 'none';
+            document.getElementById('editOverlay').style.display = 'none'; // Nếu có overlay
+            fetchProducts(); // Làm mới danh sách
+        })
+        .catch(error => {
+            console.error('Update error:', error);
+            alert('Có lỗi xảy ra khi cập nhật sản phẩm: ' + error.message);
+        });
+    }
+
+    function cancelEdit() {
+        document.getElementById('editFormContainer').style.display = 'none';
+        document.getElementById('editOverlay').style.display = 'none';
+    }
+
+    function editProduct(codeProduct) {
+        console.log('Editing product:', codeProduct);
+        
+        // Thêm debug để kiểm tra element tồn tại
+        const formContainer = document.getElementById('editFormContainer');
+        console.log('Form container found:', formContainer);
+        
+        if (!formContainer) {
+            console.error('editFormContainer not found!');
+            return;
+        }
+        
+        // Hiển thị form chỉnh sửa
+        formContainer.style.display = 'block';
+        console.log('Form display set to block');
+        
+        // Scroll to form để đảm bảo user nhìn thấy
+        formContainer.scrollIntoView({ behavior: 'smooth' });
+
+        // Lấy dữ liệu sản phẩm từ server
+        fetch(`http://3.107.214.196:8080/products/code/${codeProduct}`)
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) throw new Error('Không tìm thấy sản phẩm!');
+                return response.json();
+            })
+            .then(product => {
+                console.log('Product data:', product);
+                
+                // Debug từng field
+                const fields = {
+                    'editProductId': product.codeProduct || '',
+                    'editProductName': product.nameProduct || '',
+                    'editProductAuthor': product.userPartner || '',
+                    'editProductCategory': product.codeCategory || '',
+                    'editProductPrice': product.priceProduct || ''
+                };
+                
+                Object.keys(fields).forEach(fieldId => {
+                    const element = document.getElementById(fieldId);
+                    if (element) {
+                        element.value = fields[fieldId];
+                        console.log(`Set ${fieldId} = ${fields[fieldId]}`);
+                    } else {
+                        console.error(`Element ${fieldId} not found!`);
+                    }
+                });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('Không tìm thấy sản phẩm!');
+                formContainer.style.display = 'none';
+            });
+    }
+
+    // Hàm hiển thị modal chi tiết
+    async function showProductDetail(productId) {
+        try {
+            // Lấy thông tin product cơ bản
+            const productResponse = await fetch(`http://3.107.214.196:8080/products`);
+            const products = await productResponse.json();
+            const product = products.find(p => p._id === productId);
+            if (!product) {
+                alert('Không tìm thấy sản phẩm!');
+                return;
+            }
+            // Lấy thông tin chi tiết từ Book model
+            let bookDetails = null;
+            try {
+                 const bookResponse = await fetch(`http://3.107.214.196:8080/books/product/${productId}`);
+                if (bookResponse.ok) {
+                    bookDetails = await bookResponse.json();
+                }
+            } catch (bookError) {
+                // Không có dữ liệu book
+            }
+            // Điền thông tin vào form
+            document.getElementById('detailProductId').value = productId;
+            document.getElementById('detailProductName').value = product.nameProduct || '';
+            document.getElementById('detailProductPrice').value = product.priceProduct || '';
+            // Điền thông tin từ Book model (nếu có)
+            if (bookDetails) {
+                document.getElementById('detailAuthor').value = bookDetails.author || '';
+                document.getElementById('detailCategory').value = bookDetails.category || '';
+                document.getElementById('detailISBN').value = bookDetails.isbn13 || '';
+                document.getElementById('detailPublisher').value = bookDetails.publisher || '';
+                document.getElementById('detailPages').value = bookDetails.pages || '';
+                document.getElementById('detailOverview').value = bookDetails.overview || '';
+                if (bookDetails.publicationDate) {
+                    const date = new Date(bookDetails.publicationDate);
+                    document.getElementById('detailPublicationDate').value = date.toISOString().split('T')[0];
+                }
+            } else {
+                document.getElementById('detailAuthor').value = '';
+                document.getElementById('detailCategory').value = '';
+                document.getElementById('detailISBN').value = '';
+                document.getElementById('detailPublisher').value = '';
+                document.getElementById('detailPages').value = '';
+                document.getElementById('detailOverview').value = '';
+                document.getElementById('detailPublicationDate').value = '';
+            }
+            // Hiển thị modal
+            document.getElementById('detailModal').style.display = 'block';
+        } catch (error) {
+            alert('Có lỗi xảy ra khi tải thông tin chi tiết!');
+        }
+    }
+
+    // Hàm cập nhật chi tiết sản phẩm
+    async function updateProductDetail() {
+        const productId = document.getElementById('detailProductId').value;
+        const author = document.getElementById('detailAuthor').value;
+        const category = document.getElementById('detailCategory').value;
+        const isbn13 = document.getElementById('detailISBN').value;
+        const publisher = document.getElementById('detailPublisher').value;
+        const publicationDate = document.getElementById('detailPublicationDate').value;
+        const pages = document.getElementById('detailPages').value;
+        const overview = document.getElementById('detailOverview').value;
+        try {
+            // Gửi request cập nhật Book dựa trên productId (_id của Product)
+            const res = await fetch(`http://3.107.214.196:8080/books/${productId}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    author, category, isbn13, publisher, publicationDate, pages, overview
+                })
+            });
+            if (res.ok) {
+                alert('Cập nhật chi tiết thành công!');
+                document.getElementById('detailModal').style.display = 'none';
+                fetchProducts(); // Làm mới danh sách nếu cần
+            } else {
+                alert('Cập nhật thất bại!');
+            }
+        } catch (err) {
+            alert('Có lỗi xảy ra khi cập nhật chi tiết!');
+        }
+    }
+
+    // Event cho nút Hủy và nút X
+    function closeDetailModal() {
+        document.getElementById('detailModal').style.display = 'none';
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Nút Hủy
+        const btnCancel = document.querySelector('.btn-cancel-detail');
+        if (btnCancel) btnCancel.onclick = closeDetailModal;
+        // Nút X
+        const btnClose = document.querySelector('.close-detail');
+        if (btnClose) btnClose.onclick = closeDetailModal;
+        // Nút Lưu
+        const btnSave = document.querySelector('.btn-save-detail');
+        if (btnSave) btnSave.onclick = updateProductDetail;
+    });
 
     // Gọi hàm khi trang được tải
     window.onload = function() {

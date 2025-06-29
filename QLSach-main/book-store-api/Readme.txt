@@ -1,8 +1,8 @@
 Các lệnh thao tác với API bằng Postman  ví dụ cho user, các models khác tương tự: 
 Các API CRUD cho User:
-GET tất cả các User: GET http://localhost:8080/user
-GET một User theo ID: GET http://localhost:8080/user/:id
-Tạo một User mới: POST http://localhost:8080/user
+GET tất cả các User: GET http://3.107.214.196:8080/user
+GET một User theo ID: GET http://3.107.214.196:8080/user/:id
+Tạo một User mới: POST http://3.107.214.196:8080/user
 Mở body=> raw nhập body json sau:
 
 
@@ -15,5 +15,5 @@ Mở body=> raw nhập body json sau:
   "strUriAvatar": ""
 }
 
-Cập nhật User theo ID: PATCH http://localhost:8080/user/:id
-Xóa User theo ID: DELETE http://localhost:8080/user/:id
+Cập nhật User theo ID: PATCH http://3.107.214.196:8080/user/:id
+Xóa User theo ID: DELETE http://3.107.214.196:8080/user/:id

@@ -44,10 +44,15 @@ router.post('/', async (req, res) => {
 router.patch('/:codeProduct', async (req, res) => {
   try {
     const codeProduct = req.params.codeProduct;
+    console.log('Updating product with code:', codeProduct);
+    console.log('Update data:', req.body);
     
     // Tìm sản phẩm theo mã sản phẩm
     const product = await Product.findOne({ codeProduct: codeProduct });
-    if (!product) return res.status(404).json({ message: 'Product not found' });
+    if (!product) {
+      console.log('Product not found');
+      return res.status(404).json({ message: 'Product not found' });
+    }
 
     // Cập nhật các trường nếu có trong request body
     if (req.body.codeCategory !== undefined) {
@@ -69,10 +74,13 @@ router.patch('/:codeProduct', async (req, res) => {
       product.userPartner = req.body.userPartner;
     }
 
-    // Lưu lại sản phẩm đã cập nhật
+    // Lưu thay đổi
     const updatedProduct = await product.save();
+    console.log('Product updated successfully:', updatedProduct);
+    
     res.json(updatedProduct);
   } catch (err) {
+    console.error('Error updating product:', err);
     res.status(400).json({ message: err.message });
   }
 });
@@ -94,6 +102,17 @@ router.delete('/:codeProduct', async (req, res) => {
   }
 });
 
+// Lấy một sản phẩm theo codeProduct (dùng cho frontend sửa/xem sản phẩm)
+router.get('/code/:codeProduct', async (req, res) => {
+  try {
+    const product = await Product.findOne({ codeProduct: req.params.codeProduct });
+    if (!product) return res.status(404).json({ message: 'Product not found' });
+    res.json(product);
+  } catch (err) {
+    console.error('Error finding product:', err);
+    res.status(500).json({ message: err.message });
+  }
+});
 
 // Middleware để lấy sản phẩm theo ID
 async function getProduct(req, res, next) {
@@ -106,6 +125,7 @@ async function getProduct(req, res, next) {
   } catch (err) {
     return res.status(500).json({ message: err.message });
   }
+  
   res.product = product;
   next();
 }

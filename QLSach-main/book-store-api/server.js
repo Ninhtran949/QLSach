@@ -44,7 +44,8 @@ const userRouter = require('./routes/user');
 app.use('/user', userRouter); 
 const cartRouter = require('./routes/cart')(io); // Truyền io vào router
 app.use('/cart', cartRouter);
-
+const booksRouter = require('./routes/books');
+app.use('/books', booksRouter);
 
 // Import và thiết lập WebSocket chat
 const setupWebSocket = require('./chat');
@@ -71,7 +72,7 @@ io.on('connection', (socket) => {
 // Khởi chạy server
 const PORT = process.env.PORT || 8080;
 server.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+  console.log(`Server is running on http://3.107.214.196:${PORT}`);
 });
 
 // Xuất io để sử dụng trong các router nếu cần

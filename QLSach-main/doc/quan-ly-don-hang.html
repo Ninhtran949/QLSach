@@ -216,7 +216,7 @@
     $("#ModalUP").modal({ backdrop: false, keyboard: false })
   });
   // Sử dụng Fetch API để gọi đến API lấy tất cả bills
-  fetch('http://localhost:8080/bills')
+  fetch('http://3.107.214.196:8080/bills')
           .then(response => response.json())  // Lấy dữ liệu từ API và chuyển thành JSON
           .then(data => {
             const billsTableBody = document.querySelector('#bills-table tbody');  // Lấy phần tbody của bảng
